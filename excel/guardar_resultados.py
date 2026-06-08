@@ -1,9 +1,26 @@
 import gspread
 from google.oauth2.service_account import Credentials
 import requests
+import os
+import json
 
 API_COMPETITION = "WC"
 API_BASE_URL = "https://api.football-data.org/v4"
+
+# =========================================================
+# FUNCIÓN CENTRAL PARA CREDENCIALES (RENDER + LOCAL)
+# =========================================================
+def obtener_credenciales():
+    if os.environ.get("GOOGLE_CREDENTIALS"):
+        info = json.loads(os.environ["GOOGLE_CREDENTIALS"])
+        return Credentials.from_service_account_info(
+            info,
+            scopes=["https://www.googleapis.com/auth/spreadsheets"]
+        )
+    return Credentials.from_service_account_file(
+        "excel/credenciales.json",
+        scopes=["https://www.googleapis.com/auth/spreadsheets"]
+    )
 
 # =========================================================
 # TRADUCCIÓN DE NOMBRES (EN → ES)
@@ -368,7 +385,6 @@ def recalcular_todos(ws, api_key):
     all_rows = ws.get_all_values()
     grupos = ["A","B","C","D","E","F","G","H","I","J","K","L"]
 
-    # Vamos a construir todas las filas nuevas de detalles/puntos
     updates = []
 
     for i in range(3, len(all_rows)+1):
@@ -400,11 +416,8 @@ def recalcular_todos(ws, api_key):
         puntos = calcular_puntos(reales, usuario)
         texto_pos, texto_clas, coincide_gol = generar_detalles_aciertos(reales, usuario)
 
-        # Reemplazamos las últimas 4 columnas de la fila
-        # Coincidencia de posiciones, Coincidencias clasificados, Coincidencia de goleador, Puntos
         nueva_fila = fila
         if len(nueva_fila) < 5 + 4*12 + 8 + 4:
-            # por si acaso, aseguramos longitud mínima
             while len(nueva_fila) < 5 + 4*12 + 8 + 4:
                 nueva_fila.append("")
 
@@ -415,7 +428,6 @@ def recalcular_todos(ws, api_key):
 
         updates.append(nueva_fila)
 
-    # Batch update de todas las filas de participantes
     if updates:
         rango = f"A3"
         ws.update(rango, updates)
@@ -425,10 +437,7 @@ def recalcular_todos(ws, api_key):
 # =========================================================
 def guardar_resultados(datos, SHEET_ID, api_key):
 
-    creds = Credentials.from_service_account_file(
-        "excel/credenciales.json",
-        scopes=["https://www.googleapis.com/auth/spreadsheets"]
-    )
+    creds = obtener_credenciales()
     cliente = gspread.authorize(creds)
     ws = cliente.open_by_key(SHEET_ID).sheet1
 
@@ -437,7 +446,6 @@ def guardar_resultados(datos, SHEET_ID, api_key):
 
     grupos = ["A","B","C","D","E","F","G","H","I","J","K","L"]
 
-    # Convertir terceros seleccionados (grupos) → países
     terceros_paises = []
     for g in datos["terceros"]:
         pais = datos["terceros_real"].get(g, "")
@@ -477,15 +485,4 @@ def guardar_resultados(datos, SHEET_ID, api_key):
     fila.append(datos["vice"])
     fila.append(datos["tercero_final"])
 
-    fila.append(texto_pos)
-    fila.append(texto_clas)
-    fila.append(coincide_gol)
-
-    fila.append(puntos)
-
-    # Batch: escribir la fila completa en la siguiente fila disponible
-    ultima_fila = len(ws.get_all_values()) + 1
-    rango = f"A{ultima_fila}"
-    ws.update(rango, [fila])
-
-    return True
+    fila.append(texto_pos
