@@ -485,4 +485,14 @@ def guardar_resultados(datos, SHEET_ID, api_key):
     fila.append(datos["vice"])
     fila.append(datos["tercero_final"])
 
-    fila.append(texto_pos
+    fila.append(texto_pos)
+    fila.append(texto_clas)
+    fila.append(coincide_gol)
+    fila.append(puntos)
+
+    # Escribir la fila completa en la siguiente fila disponible
+    ultima_fila = len(ws.get_all_values()) + 1
+    rango = f"A{ultima_fila}"
+    ws.update(rango, [fila])
+
+    return True
