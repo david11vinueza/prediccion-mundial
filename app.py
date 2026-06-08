@@ -20,6 +20,7 @@ import atexit
 
 import os
 import shutil
+import json
 
 app = Flask(__name__)
 app.secret_key = "clave-super-secreta"
@@ -29,10 +30,8 @@ API_KEY = "4c13ad48e7484c4b9dae8d50fea972fa"
 
 
 # =========================================================
-# GOOGLE SHEETS — CONEXIÓN GLOBAL (MUY RÁPIDA)
+# GOOGLE SHEETS — CONEXIÓN GLOBAL (MODO RENDER + LOCAL)
 # =========================================================
-import json
-
 if os.environ.get("GOOGLE_CREDENTIALS"):
     info = json.loads(os.environ["GOOGLE_CREDENTIALS"])
     creds = Credentials.from_service_account_info(
@@ -48,7 +47,6 @@ else:
 
 cliente = gspread.authorize(creds)
 ws_global = cliente.open_by_key(SHEET_ID).sheet1
-
 
 
 def get_sheet():
@@ -84,7 +82,7 @@ atexit.register(lambda: scheduler.shutdown())
 
 
 # =========================================================
-# INDEX — AHORA ES INSTANTÁNEO
+# INDEX
 # =========================================================
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -262,8 +260,6 @@ def ranking():
 # =========================================================
 # EJECUCIÓN
 # =========================================================
-
-
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
