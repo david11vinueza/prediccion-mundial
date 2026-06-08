@@ -10,7 +10,10 @@
         para confirmar tu participación.
     </p>
 
-    <a href="https://wa.me/593987642437"
+    <!-- BOTÓN WHATSAPP CON MENSAJE BASE -->
+    <a href="https://wa.me/593987642437?text=Quiero%20información%20para%20pagar%20la%20inscripción"
+       target="_blank"
+       rel="noopener noreferrer"
        style="display:inline-block; margin-top:15px; background:#25D366; color:white;
               padding:12px 20px; border-radius:6px; font-size:18px; text-decoration:none;">
         Enviar comprobante por WhatsApp
@@ -18,7 +21,10 @@
 
     <br><br>
 
+    <!-- VER PDF EN NUEVA PESTAÑA -->
     <a href="{{ url_for('ver_pdf', archivo=nombre_pdf) }}"
+       target="_blank"
+       rel="noopener noreferrer"
        style="display:inline-block; margin-top:25px; background:#1a73e8; color:white;
               padding:12px 20px; border-radius:6px; font-size:18px; text-decoration:none;">
         Ver mi PDF

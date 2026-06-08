@@ -1,47 +1,6 @@
 {% extends "base.html" %}
 {% block contenido %}
 
-<style>
-    .tabla-ranking {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 15px; /* ✔ letra más grande */
-    }
-    .tabla-ranking th {
-        background: #1a73e8;
-        color: white;
-        padding: 10px;
-        text-align: center;
-        font-size: 15px;
-        white-space: normal; /* ✔ permite salto de línea */
-    }
-    .tabla-ranking td {
-        padding: 8px;
-        border-bottom: 1px solid #ddd;
-        text-align: center;
-        vertical-align: middle;
-        white-space: normal; /* ✔ nombres largos en varias líneas */
-        word-wrap: break-word;
-    }
-    .medalla {
-        font-size: 22px; /* ✔ más grande */
-        margin-right: 6px;
-    }
-    .btn-volver {
-        display: block;
-        width: 260px;
-        margin: 25px auto 40px auto;
-        background: #1a73e8;
-        color: white;
-        padding: 12px 0;
-        border-radius: 6px;
-        font-size: 17px;
-        font-weight: 600;
-        text-decoration: none;
-        text-align: center;
-    }
-</style>
-
 <div class="container mt-4">
 
     <h2 class="text-center mb-4">🏆 Ranking General</h2>
@@ -55,11 +14,8 @@
                     <th>#</th>
                     <th>Nombre</th>
                     <th>Apellido</th>
-                    
-                    <!-- ✔ puntos -->
                     <th>Puntos</th>
 
-                    <!-- ✔ columnas A1, A2, ..., L4 -->
                     {% set grupos = ["A","B","C","D","E","F","G","H","I","J","K","L"] %}
                     {% for g in grupos %}
                         <th>{{ g }}1</th>
@@ -68,18 +24,14 @@
                         <th>{{ g }}4</th>
                     {% endfor %}
 
-                    <!-- ✔ mejores terceros -->
                     {% for i in range(1,9) %}
                         <th>MT{{ i }}</th>
                     {% endfor %}
 
-                    <!-- ✔ finales -->
                     <th>Goleador</th>
                     <th>Campeón</th>
                     <th>Vice</th>
                     <th>3er Lugar</th>
-
-
                 </tr>
             </thead>
 
@@ -87,14 +39,13 @@
                 {% for fila in participantes %}
                 <tr>
 
-                    <!-- ✔ medallas sin colores -->
                     <td>
                         {% if loop.index == 1 %}
-                            <span class="medalla">🥇</span>
+                            🥇
                         {% elif loop.index == 2 %}
-                            <span class="medalla">🥈</span>
+                            🥈
                         {% elif loop.index == 3 %}
-                            <span class="medalla">🥉</span>
+                            🥉
                         {% else %}
                             {{ loop.index }}
                         {% endif %}
@@ -102,11 +53,8 @@
 
                     <td>{{ fila["Nombre"] }}</td>
                     <td>{{ fila["Apellido"] }}</td>
-                    
-                    <!-- ✔ puntos -->
                     <td><strong>{{ fila["Puntos"] }}</strong></td>
 
-                    <!-- ✔ grupos -->
                     {% for g in grupos %}
                         <td>{{ fila[g ~ " - 1°"] }}</td>
                         <td>{{ fila[g ~ " - 2°"] }}</td>
@@ -114,18 +62,14 @@
                         <td>{{ fila[g ~ " - 4°"] }}</td>
                     {% endfor %}
 
-                    <!-- ✔ mejores terceros -->
                     {% for i in range(1,9) %}
                         <td>{{ fila["Mejor Tercero " ~ i] }}</td>
                     {% endfor %}
 
-                    <!-- ✔ finales -->
                     <td>{{ fila["Goleador"] }}</td>
                     <td>{{ fila["Campeón"] }}</td>
                     <td>{{ fila["Vicecampeón"] }}</td>
                     <td>{{ fila["Tercer Lugar"] }}</td>
-
-
 
                 </tr>
                 {% endfor %}
@@ -134,7 +78,6 @@
         </table>
     </div>
 
-    <!-- ✔ botón arreglado y del mismo tamaño -->
     <a href="/" class="btn-volver">Volver al inicio</a>
 
 </div>

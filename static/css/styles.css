@@ -184,14 +184,12 @@ button:hover, .btn:hover {
     gap: 14px;
 }
 
-/* COLUMNA IZQUIERDA: checkbox + bandera */
 .tercero-left {
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
-/* ✔ CORRECCIÓN REAL DE ALINEACIÓN */
 .tercero-left input[type="checkbox"] {
     width: 20px;
     height: 20px;
@@ -199,17 +197,94 @@ button:hover, .btn:hover {
     vertical-align: middle;
 }
 
-/* Bandera */
 .tercero-left img {
     width: 30px;
     height: 22px;
     border: 1px solid #ccc;
 }
 
-/* Texto */
 .tercero-text {
     font-size: 15px;
     color: #333;
     display: flex;
     align-items: center;
+}
+
+/* =========================================================
+   OPTIMIZACIÓN PARA MÓVIL (RESPONSIVE)
+   ========================================================= */
+@media (max-width: 768px) {
+
+    body {
+        overflow-x: hidden;
+    }
+
+    .contenedor {
+        width: 92%;
+        margin: 20px auto;
+        padding: 20px;
+    }
+
+    .header-content {
+        padding: 0 12px;
+        gap: 8px;
+    }
+
+    .logo-mundial {
+        height: 32px;
+    }
+
+    .titulo-mundial {
+        font-size: 16px;
+    }
+
+    input, select {
+        font-size: 16px;
+        padding: 10px;
+    }
+
+    button, .btn {
+        font-size: 17px;
+        padding: 14px;
+    }
+
+    .contenedor-grupos {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .grupo {
+        padding: 12px;
+    }
+
+    .terceros-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .tercero-item {
+        padding: 12px;
+        gap: 10px;
+    }
+
+    .tercero-left img {
+        width: 26px;
+        height: 20px;
+    }
+
+    .tercero-text {
+        font-size: 14px;
+    }
+
+    table {
+        font-size: 14px;
+        width: 100%;
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    th, td {
+        padding: 6px 8px;
+    }
 }
