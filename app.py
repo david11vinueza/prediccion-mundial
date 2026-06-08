@@ -31,12 +31,24 @@ API_KEY = "4c13ad48e7484c4b9dae8d50fea972fa"
 # =========================================================
 # GOOGLE SHEETS — CONEXIÓN GLOBAL (MUY RÁPIDA)
 # =========================================================
-creds = Credentials.from_service_account_file(
-    "excel/credenciales.json",
-    scopes=["https://www.googleapis.com/auth/spreadsheets"]
-)
+import json
+
+if os.environ.get("GOOGLE_CREDENTIALS"):
+    info = json.loads(os.environ["GOOGLE_CREDENTIALS"])
+    creds = Credentials.from_service_account_info(
+        info,
+        scopes=["https://www.googleapis.com/auth/spreadsheets"]
+    )
+else:
+    # Modo local
+    creds = Credentials.from_service_account_file(
+        "excel/credenciales.json",
+        scopes=["https://www.googleapis.com/auth/spreadsheets"]
+    )
+
 cliente = gspread.authorize(creds)
 ws_global = cliente.open_by_key(SHEET_ID).sheet1
+
 
 
 def get_sheet():
@@ -248,7 +260,10 @@ def ranking():
 
 
 # =========================================================
-# EJECUCIÓN LOCAL
+# EJECUCIÓN
 # =========================================================
+
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
