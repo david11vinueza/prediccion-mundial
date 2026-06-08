@@ -61,8 +61,13 @@ def tarea_actualizar_datos():
         print("[Scheduler] Actualizando datos reales...")
         ws = get_sheet()
 
+        # Encabezados por seguridad (solo si no existen)
         inicializar_encabezados(ws)
+
+        # Fila 2 = resultados reales desde football-data
         actualizar_fila2(ws, API_KEY)
+
+        # Recalcular puntos de todos los participantes
         recalcular_todos(ws, API_KEY)
 
         print("[Scheduler] Actualización completada.")
@@ -71,14 +76,27 @@ def tarea_actualizar_datos():
 
 
 scheduler = BackgroundScheduler()
+
 scheduler.add_job(
     func=tarea_actualizar_datos,
     trigger="cron",
     hour=3,
-    minute=0
+    minute=0,
+    id="actualizacion_diaria",
+    replace_existing=True
 )
+
 scheduler.start()
 atexit.register(lambda: scheduler.shutdown())
+
+
+# =========================================================
+# RUTA OCULTA PARA FORZAR ACTUALIZACIÓN (PRUEBAS)
+# =========================================================
+@app.route("/forzar_actualizacion")
+def forzar_actualizacion():
+    tarea_actualizar_datos()
+    return "Actualización ejecutada manualmente."
 
 
 # =========================================================
@@ -185,12 +203,10 @@ def generar_pdf():
     ruta_pdf = generar_pdf_prediccion(datos)
     nombre_pdf = f"Prediccion_2026_{session['apellido']}_{session['nombre']}.pdf"
 
-    # Guardar PDF en static/pdfs
     os.makedirs("static/pdfs", exist_ok=True)
     ruta_destino = os.path.join("static", "pdfs", nombre_pdf)
     shutil.copy(ruta_pdf, ruta_destino)
 
-    # MOSTRAR MENSAJE DE PAGO
     return render_template("mensaje_pago.html", nombre_pdf=nombre_pdf)
 
 
@@ -228,7 +244,6 @@ def mis_puntos():
             break
 
     return render_template("mis_puntos.html", fila=mi_fila, BANDERAS=BANDERAS)
-
 
 
 # =========================================================
