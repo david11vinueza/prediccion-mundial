@@ -15,11 +15,17 @@
                 <div id="grupo{{ grupo }}" class="lista">
                     {% for pais in paises %}
                     <div class="fila-pais" data-name="{{ pais }}">
+                        
+                        <!-- HANDLE -->
+                        <div class="handle">≡</div>
+
                         <div class="posicion">1</div>
+
                         <div class="pais">
                             <img src="https://flagcdn.com/w40/{{ banderas[pais] }}.png" alt="">
                             {{ pais }}
                         </div>
+
                     </div>
                     {% endfor %}
                 </div>
@@ -60,7 +66,28 @@ function inicializarGrupo(idLista, idHidden, idTercero) {
     }
 
     new Sortable(lista, {
-        animation: 150,
+        animation: 200,
+        easing: "cubic-bezier(0.25, 1, 0.5, 1)",
+
+        handle: ".handle",   // ⭐ SOLO se arrastra desde el handle
+        ghostClass: "drag-ghost",
+        chosenClass: "drag-chosen",
+        dragClass: "drag-moving",
+
+        touchStartThreshold: 10,
+        delayOnTouchOnly: true,
+
+        fallbackOnBody: true,
+        fallbackTolerance: 5,
+
+        scroll: true,
+        scrollSensitivity: 60,
+        scrollSpeed: 15,
+
+        onStart: () => {
+            if (navigator.vibrate) navigator.vibrate(10); // ⭐ vibración háptica
+        },
+
         onSort: actualizarOrden
     });
 

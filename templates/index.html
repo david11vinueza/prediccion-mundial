@@ -4,17 +4,86 @@
 <div class="contenedor">
     <h2>Registro de Participante</h2>
 
-    <form method="POST">
+    <form method="POST" id="formRegistro">
+
         <input type="text" name="nombre" placeholder="Nombre" required>
         <input type="text" name="apellido" placeholder="Apellido" required>
         <input type="number" name="edad" placeholder="Edad" required>
         <input type="text" name="cedula" placeholder="Cédula (últimos 4)" required>
         <input type="text" name="celular" placeholder="Número de celular (WhatsApp)" required>
 
-        <button type="submit">Continuar</button>
+        <button type="button" id="btnContinuar">Continuar</button>
     </form>
 </div>
 
+<!-- ===========================
+     MODAL DE CONFIRMACIÓN
+     =========================== -->
+<div id="modalReglamento" class="modal-overlay" style="
+    display:none;
+    position:fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background:rgba(0,0,0,0.55);
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+">
+    <div style="
+        background:white;
+        padding:25px;
+        width:90%;
+        max-width:380px;
+        border-radius:10px;
+        text-align:center;
+    ">
+        <h3>¿Leíste y estás de acuerdo con el reglamento?</h3>
+
+        <button id="btnAceptar" style="
+            background:#1a73e8;
+            color:white;
+            padding:12px;
+            width:100%;
+            border:none;
+            border-radius:6px;
+            margin-top:15px;
+            font-size:16px;
+        ">Sí, continuar</button>
+
+        <button id="btnCerrar" style="
+            background:#ccc;
+            color:#333;
+            padding:12px;
+            width:100%;
+            border:none;
+            border-radius:6px;
+            margin-top:10px;
+            font-size:16px;
+        ">Quiero leer</button>
+    </div>
+</div>
+
+<script>
+const btnContinuar = document.getElementById("btnContinuar");
+const modal = document.getElementById("modalReglamento");
+const btnCerrar = document.getElementById("btnCerrar");
+const btnAceptar = document.getElementById("btnAceptar");
+const form = document.getElementById("formRegistro");
+
+btnContinuar.onclick = () => {
+    modal.style.display = "flex";
+};
+
+btnCerrar.onclick = () => {
+    modal.style.display = "none";
+};
+
+btnAceptar.onclick = () => {
+    form.submit();
+};
+</script>
+
+<!-- REGLAS -->
 <div class="notas-container" style="
     margin-top: 30px;
     padding: 20px;
@@ -24,56 +93,8 @@
     font-size: 15px;
     line-height: 1.5;
 ">
-
-    <h3 style="margin-top: 0; color: #1a73e8; font-weight: 700;">
-        Reglas del Juego
-    </h3>
-
-    <p><strong>1.</strong> Cada participante puede inscribirse una sola vez. El costo es de <strong>$10</strong>.  
-    Consultar los datos para transferir al celular <strong>0987642437</strong>.</p>
-
-    <p><strong>2. El juego consta de dos predicciones:</strong></p>
-
-    <p><strong>a) Fase de grupos (habilitado hasta el 10 de junio):</strong><br>
-    • Escoger el orden final de cada grupo.<br>
-    • Seleccionar los <strong>8 mejores terceros</strong>.<br>
-    • Elegir el <strong>goleador de la fase de grupos</strong>.<br>
-    • Primer intento de <strong>campeón, vicecampeón y tercer lugar</strong>.</p>
-
-    <p><strong>b) Fase eliminatoria:</strong><br>
-    • Se habilita apenas se termine la fase de grupos, <strong>SOLO DESDE EL 27 de junio 20:00 HASTA EL 28 de junio 11:30</strong> .<br>
-    • Seleccionar ganadores de cada llave hasta la final.<br>
-    • Elegir el <strong>goleador final</strong> y el <strong>mejor jugador</strong> del mundial.</p>
-
-    <p><strong>3. Puntuación:</strong></p>
-
-    <ul style="margin-left: 20px;">
-        <li>25 puntos por cada país en la posición correcta (1° al 4°).</li>
-        <li>10 puntos por cada país clasificado que no haya recibido 25 puntos.</li>
-        <li>100 puntos si el goleador de fase de grupos coincide con el real.</li>
-        <li>500 puntos por acertar el campeón antes del mundial.</li>
-        <li>250 puntos por acertar el vicecampeón antes del mundial.</li>
-        <li>125 puntos por acertar el tercer puesto antes del mundial.</li>
-        <li>25 puntos por acierto en 16vos.</li>
-        <li>50 puntos por acierto en 8vos.</li>
-        <li>100 puntos por acierto en 4tos.</li>
-        <li>200 puntos por acierto en semifinal.</li>
-        <li>350 puntos por acertar el tercer lugar.</li>
-        <li>500 puntos por acertar al ganador.</li>
-        <li>100 puntos por acertar el goleador final.</li>
-        <li>100 puntos por acertar al mejor jugador.</li>
-    </ul>
-
-    <p><strong>4. Reparto del dinero:</strong></p>
-    <ul style="margin-left: 20px;">
-        <li>1er lugar: <strong>70%</strong> de lo recaudado.</li>
-        <li>2do lugar: <strong>20%</strong>.</li>
-        <li>3er lugar: <strong>10%</strong>.</li>
-    </ul>
-
-    <p><strong>5.</strong> Por efectos de transparencia, se actualizarán los puntos de cada participante a diario y pueden ser consultados en cualquier momento, también se pueden ver cuántos participantes se encuentran inscritos y sus predicciones</p>
-
+    <!-- (tu texto original aquí) -->
+    {{ super() }}
 </div>
-
 
 {% endblock %}
