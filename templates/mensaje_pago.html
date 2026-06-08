@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block contenido %}
+
+<div class="contenedor" style="text-align:center; margin-top:40px;">
+
+    <h2 style="color:#d97706;">¡Inscripción registrada!</h2>
+
+    <p style="font-size:18px; margin-top:20px;">
+        Recuerda que debes pagar los <strong>$10</strong> de inscripción antes del mundial
+        para confirmar tu participación.
+    </p>
+
+    <a href="https://wa.me/593987642437"
+       style="display:inline-block; margin-top:15px; background:#25D366; color:white;
+              padding:12px 20px; border-radius:6px; font-size:18px; text-decoration:none;">
+        Enviar comprobante por WhatsApp
+    </a>
+
+    <br><br>
+
+    <a href="{{ url_for('ver_pdf', archivo=nombre_pdf) }}"
+       style="display:inline-block; margin-top:25px; background:#1a73e8; color:white;
+              padding:12px 20px; border-radius:6px; font-size:18px; text-decoration:none;">
+        Ver mi PDF
+    </a>
+
+</div>
+
+{% endblock %}

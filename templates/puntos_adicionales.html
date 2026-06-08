@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% block contenido %}
+
+<div class="contenedor">
+
+    <h2>Puntos Adicionales</h2>
+
+    <form method="POST" action="/generar_pdf" id="formPuntos">
+
+        <!-- ========================================================= -->
+        <!-- SECCIÓN 1 — MEJORES TERCEROS -->
+        <!-- ========================================================= -->
+        <div class="seccion">
+            <h3>Selecciona exactamente 8 mejores terceros</h3>
+
+            <div class="terceros-grid">
+
+                {% for grupo, pais in terceros.items() %}
+                <label class="tercero-item">
+
+                    <div class="tercero-left">
+                        <input type="checkbox" name="tercero" value="{{ grupo }}">
+                        <img src="https://flagcdn.com/w40/{{ banderas[pais] }}.png" alt="">
+                    </div>
+
+                    <div class="tercero-text">
+                        {{ pais }} (Grupo {{ grupo }})
+                    </div>
+
+                </label>
+                {% endfor %}
+
+            </div>
+
+            <div id="contadorTerceros">Seleccionados: 0 / 8</div>
+            <input type="hidden" id="tercerosSeleccionados" name="tercerosSeleccionados">
+
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SECCIÓN 2 — PREDICCIONES ADICIONALES (CUADRO SEPARADO) -->
+        <!-- ========================================================= -->
+        <div class="seccion" style="margin-top: 30px;">
+
+            <div style="
+                padding: 20px;
+                background: #fff7e6;
+                border-left: 6px solid #ff9800;
+                border-radius: 8px;
+            ">
+                <h3 style="margin-top: 0; color: #d97706; font-weight: 700;">
+                    Predicciones adicionales
+                </h3>
+
+                <div class="contenedor-predicciones">
+
+                    <div class="pred-item">
+                        <label>Goleador de la fase de grupos</label>
+                        <input class="input" list="listaGoleadores" name="goleador" required>
+                    </div>
+
+                    <div class="pred-item">
+                        <label>Campeón</label>
+                        <input class="input" list="listaPaises" name="campeon" id="campoCampeon" required>
+                    </div>
+
+                    <div class="pred-item">
+                        <label>Vicecampeón</label>
+                        <input class="input" list="listaPaises" name="vice" id="campoVice" required>
+                    </div>
+
+                    <div class="pred-item">
+                        <label>3er lugar</label>
+                        <input class="input" list="listaPaises" name="tercero_final" id="campoTercero" required>
+                    </div>
+
+                </div>
+
+                <datalist id="listaGoleadores">
+                    {% for jugador in goleadores %}
+                    <option value="{{ jugador }}">
+                    {% endfor %}
+                </datalist>
+
+                <datalist id="listaPaises">
+                    {% for g, paises in grupos.items() %}
+                        {% for p in paises %}
+                        <option value="{{ p }}">
+                        {% endfor %}
+                    {% endfor %}
+                </datalist>
+
+            </div>
+
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- BOTÓN FINAL -->
+        <!-- ========================================================= -->
+        <button class="btn" type="submit" id="btnGenerar">
+            Guardar e inscribirse
+        </button>
+
+    </form>
+
+</div>
+
+<!-- ========================================================= -->
+<!-- JS — EXACTAMENTE 8 TERCEROS -->
+<!-- ========================================================= -->
+<script>
+const checkboxes = document.querySelectorAll('input[name="tercero"]');
+const contador = document.getElementById('contadorTerceros');
+const hidden = document.getElementById('tercerosSeleccionados');
+const btn = document.getElementById('btnGenerar');
+
+function actualizar() {
+    const seleccionados = Array.from(checkboxes).filter(c => c.checked);
+
+    contador.textContent = `Seleccionados: ${seleccionados.length} / 8`;
+    hidden.value = seleccionados.map(c => c.value).join(",");
+
+    btn.disabled = seleccionados.length !== 8;
+
+    if (seleccionados.length >= 8) {
+        checkboxes.forEach(c => { if (!c.checked) c.disabled = true; });
+    } else {
+        checkboxes.forEach(c => c.disabled = false);
+    }
+}
+
+checkboxes.forEach(c => c.addEventListener("change", actualizar));
+actualizar();
+</script>
+
+<!-- ========================================================= -->
+<!-- JS — EVITAR DUPLICADOS EN CAMPEÓN / VICE / 3RO -->
+<!-- ========================================================= -->
+<script>
+const campoCampeon = document.getElementById("campoCampeon");
+const campoVice = document.getElementById("campoVice");
+const campoTercero = document.getElementById("campoTercero");
+
+function validarUnicos() {
+    const valores = [campoCampeon.value, campoVice.value, campoTercero.value]
+        .filter(v => v.trim() !== "");
+
+    const setValores = new Set(valores);
+
+    if (setValores.size !== valores.length) {
+        alert("Campeón, Vicecampeón y 3er lugar deben ser países distintos.");
+    }
+}
+
+[campoCampeon, campoVice, campoTercero].forEach(campo => {
+    campo.addEventListener("change", validarUnicos);
+});
+</script>
+
+{% endblock %}

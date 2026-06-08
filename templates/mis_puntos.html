@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+{% block contenido %}
+
+<style>
+    .bloque {
+        background: white;
+        padding: 18px 25px;
+        border: 1px solid #d0d0d0;
+        border-radius: 6px;
+        margin-bottom: 28px;
+    }
+    .titulo {
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 12px;
+        color: #222;
+    }
+    .linea {
+        font-size: 15px;
+        margin-bottom: 6px;
+    }
+    .grupo-col {
+        width: 48%;
+        display: inline-block;
+        vertical-align: top;
+        margin-bottom: 20px;
+    }
+    .grupo-titulo {
+        font-size: 16px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+    .item {
+        font-size: 14px;
+        margin-bottom: 4px;
+        display: flex;
+        align-items: center;
+    }
+    .bandera {
+        width: 18px;
+        height: 12px;
+        margin-right: 6px;
+        object-fit: cover;
+        border-radius: 2px;
+    }
+    .puntaje {
+        font-size: 22px;
+        font-weight: 700;
+        color: #1a73e8;
+        margin-top: 10px;
+    }
+    .btn-ranking {
+        display: inline-block;
+        background: #1a73e8;
+        color: white;
+        padding: 10px 22px;
+        border-radius: 6px;
+        font-size: 17px;
+        text-decoration: none;
+        margin-top: 20px;
+    }
+</style>
+
+<div class="container mt-4">
+
+    <!-- DATOS PERSONALES -->
+    <div class="bloque">
+        <div class="titulo">Datos del Participante</div>
+
+        <div class="linea"><strong>Participante:</strong> {{ fila["Nombre"] }} {{ fila["Apellido"] }}</div>
+        <div class="linea"><strong>Edad:</strong> {{ fila["Edad"] }}</div>
+
+        <div class="puntaje">
+            Puntaje actual: {{ fila.get("Puntos", 0) }}
+        </div>
+    </div>
+
+    <!-- PREDICCIONES POR GRUPO -->
+    <div class="bloque">
+        <div class="titulo">Predicciones por Grupo</div>
+
+        {% set pares = [
+            ("A","B"),
+            ("C","D"),
+            ("E","F"),
+            ("G","H"),
+            ("I","J"),
+            ("K","L")
+        ] %}
+
+        {% for g1, g2 in pares %}
+            <div class="grupo-col">
+                <div class="grupo-titulo">Grupo {{ g1 }}</div>
+                {% for pos in ["1°","2°","3°","4°"] %}
+                    {% set pais = fila[g1 ~ " - " ~ pos] %}
+                    <div class="item">
+                        {% if pais %}
+                            <img src="{{ url_for('static', filename='img/banderas/' ~ BANDERAS[pais] ~ '.png') }}" class="bandera">
+                            {{ pais }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="grupo-col">
+                <div class="grupo-titulo">Grupo {{ g2 }}</div>
+                {% for pos in ["1°","2°","3°","4°"] %}
+                    {% set pais = fila[g2 ~ " - " ~ pos] %}
+                    <div class="item">
+                        {% if pais %}
+                            <img src="{{ url_for('static', filename='img/banderas/' ~ BANDERAS[pais] ~ '.png') }}" class="bandera">
+                            {{ pais }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div style="clear: both; height: 10px;"></div>
+        {% endfor %}
+    </div>
+
+    <!-- MEJORES TERCEROS -->
+    <div class="bloque">
+        <div class="titulo">Mejores terceros</div>
+
+        {% for i in range(1,9) %}
+            {% set pais = fila["Mejor Tercero " ~ i] %}
+            <div class="item">
+                {% if pais %}
+                    <img src="{{ url_for('static', filename='img/banderas/' ~ BANDERAS[pais] ~ '.png') }}" class="bandera">
+                    {{ pais }}
+                {% else %}
+                    —
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- PREDICCIONES FINALES -->
+    <div class="bloque">
+        <div class="titulo">Predicciones finales</div>
+
+        <div class="linea"><strong>Goleador:</strong> {{ fila["Goleador"] }}</div>
+        <div class="linea"><strong>Campeón:</strong> {{ fila["Campeón"] }}</div>
+        <div class="linea"><strong>Vicecampeón:</strong> {{ fila["Vicecampeón"] }}</div>
+        <div class="linea"><strong>Tercer lugar:</strong> {{ fila["Tercer Lugar"] }}</div>
+    </div>
+
+    <!-- BOTONES -->
+        <div class="text-center mt-4 mb-5">
+            <a href="/ranking" class="btn-ranking" style="margin-bottom: 15px; display: inline-block;">
+                Ver Ranking
+            </a>
+
+            <a href="/" class="btn-ranking" style="margin-bottom: 15px; display: inline-block;">
+                Volver al inicio
+            </a>
+        </div>
+
+
+</div>
+
+{% endblock %}

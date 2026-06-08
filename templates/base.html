@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ titulo if titulo else "Predicción Mundial 2026" }}</title>
+
+    <!-- Estilos globales -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+
+<body>
+
+    <!-- ===========================
+         ENCABEZADO MUNDIALISTA
+         =========================== -->
+    <header class="header-mundial">
+        <div class="header-content">
+            <img src="{{ url_for('static', filename='img/logo2026.png') }}" class="logo-mundial" alt="Logo Mundial 2026">
+            <span class="titulo-mundial">Predicción Mundial 2026</span>
+        </div>
+    </header>
+
+
+    <!-- ===========================
+         CONTENIDO DE CADA PÁGINA
+         =========================== -->
+    <main>
+        {% block contenido %}
+        {% endblock %}
+    </main>
+
+</body>
+</html>

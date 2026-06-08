@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block contenido %}
+
+<div class="contenedor">
+    <h2>Fase de Grupos</h2>
+
+    <form method="POST" id="formGrupos">
+
+        <div class="contenedor-grupos">
+
+            {% for grupo, paises in grupos.items() %}
+            <div class="grupo">
+                <h3>Grupo {{ grupo }}</h3>
+
+                <div id="grupo{{ grupo }}" class="lista">
+                    {% for pais in paises %}
+                    <div class="fila-pais" data-name="{{ pais }}">
+                        <div class="posicion">1</div>
+                        <div class="pais">
+                            <img src="https://flagcdn.com/w40/{{ banderas[pais] }}.png" alt="">
+                            {{ pais }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <input type="hidden" id="orden{{ grupo }}" name="orden{{ grupo }}">
+                <input type="hidden" id="tercero{{ grupo }}" name="tercero{{ grupo }}">
+            </div>
+            {% endfor %}
+
+        </div>
+
+        <button id="btnGuardarTodo" type="submit">Continuar</button>
+
+    </form>
+</div>
+
+<!-- SortableJS -->
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+
+<script>
+function inicializarGrupo(idLista, idHidden, idTercero) {
+
+    const lista = document.getElementById(idLista);
+    const inputHidden = document.getElementById(idHidden);
+    const inputTercero = document.getElementById(idTercero);
+
+    function actualizarOrden() {
+        const filas = lista.querySelectorAll(".fila-pais");
+        const orden = [];
+
+        filas.forEach((fila, index) => {
+            fila.querySelector(".posicion").textContent = index + 1;
+            orden.push(fila.dataset.name);
+        });
+
+        inputHidden.value = orden.join(",");
+        inputTercero.value = orden[2];
+    }
+
+    new Sortable(lista, {
+        animation: 150,
+        onSort: actualizarOrden
+    });
+
+    actualizarOrden();
+}
+
+{% for grupo in grupos.keys() %}
+inicializarGrupo("grupo{{ grupo }}", "orden{{ grupo }}", "tercero{{ grupo }}");
+{% endfor %}
+</script>
+
+{% endblock %}
